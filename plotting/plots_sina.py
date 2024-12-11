@@ -7,13 +7,11 @@ from matplotlib_venn import venn2
 import seaborn as sns
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--tissue', type=str, required=True, help='tissue name')
 parser.add_argument('--input_gtex', type=str, required=True)
 parser.add_argument('--input_tcga', type=str, required=True)
 parser.add_argument('--output_dir', type=str, required=True)
 args = parser.parse_args()
 
-tissue = args.tissue
 gtex_data = args.input_gtex
 tcga_data = args.input_tcga
 output_dir = args.output_dir
@@ -25,11 +23,11 @@ tcga_df = pd.read_csv(tcga_data, sep=",")
 # filter the dfs for their common genes
 unique_gtex_genes = set(gtex_df['Description'])  # use unique descriptions and samples
 unique_tcga_samples = set(tcga_df['sample'])
-print("Unique GTEx descriptions: ", len(unique_gtex_genes))
-print("Unique TCGA samples: ", len(unique_tcga_samples))
+print("Unique GTEx genes ('Description' column): ", len(unique_gtex_genes))
+print("Unique TCGA genes ('sample' column): ", len(unique_tcga_samples))
 
 common_genes = unique_gtex_genes.intersection(unique_tcga_samples)
-print("Intersection of unique descriptions and unique samples: ", len(common_genes), " common genes")
+print("Intersection of unique GTEx genes and unique TCGA genes: ", len(common_genes), " common genes")
 
 gtex_intersection = gtex_df[gtex_df['Description'].isin(common_genes)]
 tcga_intersection = tcga_df[tcga_df['sample'].isin(common_genes)]
@@ -83,23 +81,23 @@ for threshold in [1000, 200]:
 
 
 # Venn diagram: use original dfs (not intersected)
-unique_gtex = set(gtex_df['Description'])  # take unique descriptions and unique samples
+unique_gtex = set(gtex_df['Description'])  # take unique 'Description' values and unique 'sample' values
 unique_tcga = set(tcga_df['sample'])
 gtex_only = unique_gtex - unique_tcga  # genes in GTEx but not in TCGA
 tcga_only = unique_tcga - unique_gtex  # genes in TCGA but not in GTEx
 intersection = unique_gtex.intersection(unique_tcga)  # common genes
 
 print("--VENN diagram--")
-print("Unique GTEx descriptions, not in TCGA samples:", len(gtex_only))
+print("Exclusive GTEx genes, not in TCGA genes:", len(gtex_only))  # the ones in 'Description' and not in 'sample'
 print("Intersection (common genes):", len(intersection))
-print("Unique TCGA samples, not in GTEx descriptions:", len(tcga_only))
+print("Exclusive TCGA genes, not in GTEx genes:", len(tcga_only))  # the ones in 'sample' and not in 'Description'
 
 plt.figure(figsize=(8, 8))
 venn = venn2(
     subsets=(len(gtex_only), len(tcga_only), len(intersection)),  # attention to order: intersection as third value
-    set_labels=('Unique GTEx descriptions', 'Unique TCGA samples')
+    set_labels=('Exclusive GTEx genes', 'Exclusive TCGA genes', 'Common genes')
 )
-plt.title('Venn diagram of common genes and unique samples')
+plt.title('Venn diagram of common genes and exclusive GTEx/TCGA genes')  # unique genes are used
 os.makedirs(output_dir, exist_ok=True)  # ensure the output directory exists
 output_path = os.path.join(output_dir, "venn_diagram.png")
 plt.savefig(output_path, dpi=300)
