@@ -42,5 +42,5 @@ print(f"Number of genes not expressed in ≥80% of samples: {len(low_expression_
 print('Number of genes after removing the not expressed: ' + str(tpm_gtex_filtered.shape[0]))
 print('Number of genes after removing the ones with ENSEMBLE IDs in the Description column ' + str(tpm_gtex_no_ensemble.shape[0]))
 
-tpm_gtex_filtered.iloc[:, 1:].to_csv(output_file, index=False)
+tpm_gtex_no_ensemble.iloc[:, 1:].to_csv(output_file, index=False)
 print(f'filtered expression matrix saved to {output_file}')
