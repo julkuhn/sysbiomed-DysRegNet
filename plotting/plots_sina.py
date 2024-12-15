@@ -5,6 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib_venn import venn2
 import seaborn as sns
+import numpy as np
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input_gtex', type=str, required=True)
@@ -79,6 +80,21 @@ for threshold in [1000, 200]:
     plot.savefig(output_path, dpi=300)
     plt.close(plot)
 
+# Distribution plot with log values:
+gtex_melted['GTEx_Value'] = np.log1p(gtex_melted['GTEx_Value'])  # log gtex (ln(1+x) to avoid log(0))
+tcga_melted['TCGA_Value'] = np.log1p(tcga_melted['TCGA_Value'])  # log tcga
+plt.figure(figsize=(10, 6))
+sns.histplot(gtex_melted['GTEx_Value'], kde=True, color='blue', label='GTEx log', bins=30)
+sns.histplot(tcga_melted['TCGA_Value'], kde=True, color='orange', label='TCGA log', bins=30)
+plt.title('Distribution of log-transformed GTEx and TCGA values')
+plt.xlabel('Natural logarithmic expression value (log1p)')
+plt.ylabel('Density')
+plt.legend()
+# save file
+os.makedirs(output_dir, exist_ok=True)  # ensure the specified output_dir exists
+output_path = os.path.join(output_dir, "distribution_plot_log_values.png")
+plt.savefig(output_path, dpi=300)
+plt.close()
 
 # Venn diagram: use original dfs (not intersected)
 unique_gtex = set(gtex_df['Description'])  # take unique 'Description' values and unique 'sample' values
