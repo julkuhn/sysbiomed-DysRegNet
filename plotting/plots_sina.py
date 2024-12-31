@@ -41,11 +41,12 @@ print(tcga_intersection.shape)
 # melt the dfs for distribution plot
 gtex_melted = gtex_intersection.melt(id_vars=['Description'], var_name='GTEx_Sample', value_name='GTEx_Value')
 tcga_melted = tcga_intersection.melt(id_vars=['sample'], var_name='TCGA_Sample', value_name='TCGA_Value')
+# TODO maybe add .dropna() to the melting of the dfs
 
 # Distribution plot with all values:
 plt.figure(figsize=(10, 6))
-sns.histplot(gtex_melted['GTEx_Value'], kde=True, color='blue', label='GTEx', bins=30)
-sns.histplot(tcga_melted['TCGA_Value'], kde=True, color='orange', label='TCGA', bins=30)
+sns.histplot(gtex_melted['GTEx_Value'], kde=True, color='red', label='GTEx', bins=30)
+sns.histplot(tcga_melted['TCGA_Value'], kde=True, color='blue', label='TCGA', bins=30)
 plt.title('Distribution of GTEx and TCGA values')
 plt.xlabel('Expression value')
 plt.ylabel('Density')
@@ -64,8 +65,8 @@ def distribution_plot_without_outliers(gtex_dataframe, tcga_dataframe, outlier_t
     melted_tcga = tcga_filtered.melt(value_name='Expression', var_name='Sample').dropna()
 
     plot, ax = plt.subplots(figsize=(10, 6))
-    sns.histplot(melted_gtex['Expression'], bins=50, kde=True, color='blue', label='GTEx', alpha=0.7, ax=ax)
-    sns.histplot(melted_tcga['Expression'], bins=50, kde=True, color='orange', label='TCGA', alpha=0.7, ax=ax)
+    sns.histplot(melted_gtex['Expression'], bins=50, kde=True, color='red', label='GTEx', alpha=0.7, ax=ax)
+    sns.histplot(melted_tcga['Expression'], bins=50, kde=True, color='blue', label='TCGA', alpha=0.7, ax=ax)
     ax.set_title(f'Distribution of GTEx and TCGA values with threshold at {outlier_threshold}')
     ax.set_xlabel('Expression value')
     ax.set_ylabel('Density')
@@ -84,8 +85,8 @@ for threshold in [1000, 200]:
 gtex_melted['GTEx_Value'] = np.log1p(gtex_melted['GTEx_Value'])  # log gtex (ln(1+x) to avoid log(0))
 tcga_melted['TCGA_Value'] = np.log1p(tcga_melted['TCGA_Value'])  # log tcga
 plt.figure(figsize=(10, 6))
-sns.histplot(gtex_melted['GTEx_Value'], kde=True, color='blue', label='GTEx log', bins=30)
-sns.histplot(tcga_melted['TCGA_Value'], kde=True, color='orange', label='TCGA log', bins=30)
+sns.histplot(gtex_melted['GTEx_Value'], kde=True, color='red', label='GTEx log', bins=30)
+sns.histplot(tcga_melted['TCGA_Value'], kde=True, color='blue', label='TCGA log', bins=30)
 plt.title('Distribution of log-transformed GTEx and TCGA values')
 plt.xlabel('Natural logarithmic expression value (log1p)')
 plt.ylabel('Density')
@@ -93,6 +94,28 @@ plt.legend()
 # save file
 os.makedirs(output_dir, exist_ok=True)  # ensure the specified output_dir exists
 output_path = os.path.join(output_dir, "distribution_plot_log_values.png")
+plt.savefig(output_path, dpi=300)
+plt.close()
+
+# Distribution plot with log values and medians of the genes: -> use already logged gtex_melted and tcga_melted
+gtex_medians = gtex_intersection.iloc[:, 1:].median(axis=1)  # gene-wise medians, skipping 'Description' column
+tcga_medians = tcga_intersection.iloc[:, 1:].median(axis=1)  # gene-wise medians, skipping 'sample' column
+gtex_medians = np.log1p(gtex_medians)  # log the medians
+tcga_medians = np.log1p(tcga_medians)  # log the medians
+print("GTEx medians:")
+print(gtex_medians.head())
+print("TCGA medians:")
+print(tcga_medians.head())
+plt.figure(figsize=(10, 6))
+sns.histplot(gtex_medians, kde=True, color='red', label='GTEx logged gene medians', bins=30)
+sns.histplot(tcga_medians, kde=True, color='blue', label='TCGA logged gene medians', bins=30)
+plt.title('Distribution of Log-transformed Gene Medians')
+plt.xlabel('Logarithmic Gene Medians (log1p)')
+plt.ylabel('Density')
+plt.legend()
+# save file
+os.makedirs(output_dir, exist_ok=True)  # ensure the specified output_dir exists
+output_path = os.path.join(output_dir, "distribution_plot_log_gene_medians.png")
 plt.savefig(output_path, dpi=300)
 plt.close()
 
@@ -113,6 +136,9 @@ venn = venn2(
     subsets=(len(gtex_only), len(tcga_only), len(intersection)),  # attention to order: intersection as third value
     set_labels=('Exclusive GTEx genes', 'Exclusive TCGA genes', 'Common genes')
 )
+venn.get_patch_by_id('10').set_color('red')  # red for GTEx exclusive
+venn.get_patch_by_id('01').set_color('blue')  # blue for TCGA exclusive
+venn.get_patch_by_id('11').set_color('purple')  # purple for overlap
 plt.title('Venn diagram of common genes and exclusive GTEx/TCGA genes')  # unique genes are used
 os.makedirs(output_dir, exist_ok=True)  # ensure the output directory exists
 output_path = os.path.join(output_dir, "venn_diagram.png")
