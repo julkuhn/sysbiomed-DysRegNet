@@ -41,7 +41,6 @@ print(tcga_intersection.shape)
 # melt the dfs for distribution plot
 gtex_melted = gtex_intersection.melt(id_vars=['Description'], var_name='GTEx_Sample', value_name='GTEx_Value')
 tcga_melted = tcga_intersection.melt(id_vars=['sample'], var_name='TCGA_Sample', value_name='TCGA_Value')
-# TODO maybe add .dropna() to the melting of the dfs
 
 # Distribution plot with all values:
 plt.figure(figsize=(10, 6))
