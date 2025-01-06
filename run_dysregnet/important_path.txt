@@ -1,0 +1,15 @@
+Reference networks TCGA:
+/nfs/data/patients_networks/DysRegNet_workflow/results/reference_networks/genie3/BRCA/genie3_BRCA_tpm.top_100k.csv
+/nfs/data/patients_networks/DysRegNet_workflow/results/reference_networks/genie3/LUAD/genie3_LUAD_tpm.top_100k.csv
+
+Reference networks GTEX:
+
+Meta data TCGA:
+/nfs/data/patients_networks/DysRegNet_workflow/results/expression_processed/BRCA/tpm_meta.csv
+/nfs/data/patients_networks/DysRegNet_workflow/results/expression_processed/LUAD/tpm_meta.csv
+
+TGCA expression data:
+/nfs/data/patients_networks/DysRegNet_workflow/results/expression_processed/BRCA/tpm.csv
+/nfs/data/patients_networks/DysRegNet_workflow/results/expression_processed/LUAD/tpm.csv
+
+
