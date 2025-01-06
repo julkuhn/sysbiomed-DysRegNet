@@ -11,8 +11,7 @@
 
 
 # Activate the conda environment
-
-conda activate drn    
+   
 
 # Assign paths to parameters
 EXPR="/nfs/data/patients_networks/DysRegNet_workflow/results/expression_processed/BRCA/tpm.csv"
@@ -22,6 +21,4 @@ OUT="/nfs/data2/dysregnet_gtex/results/tcga_breast_no_confounders.fea"
 OUT_STATS="/nfs/data2/dysregnet_gtex/results/tcga_breast_no_confounders.csv"
 
 # Run the Python script with the parameters
-python dysregnet_tcga_ref.py --expr $EXPR --meta $META --grn $GRN --no_direction --output $OUT --output_stats $OUT_STATS
-
-conda deactivate 
+python run_dysregnet.py --expr $EXPR --meta $META --grn $GRN --no_direction --output $OUT --output_stats $OUT_STATS
