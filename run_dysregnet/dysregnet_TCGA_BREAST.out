@@ -1,0 +1,101 @@
+Python version:
+3.11.0 | packaged by conda-forge | (main, Jan 14 2023, 12:27:40) [GCC 11.3.0]
+Arguments:
+Namespace(expr='/nfs/data/patients_networks/DysRegNet_workflow/results/expression_processed/BRCA/tpm.csv', meta='/nfs/data/patients_networks/DysRegNet_workflow/results/expression_processed/BRCA/tpm_meta.csv', grn='/nfs/data/patients_networks/DysRegNet_workflow/results/reference_networks/genie3/BRCA/genie3_BRCA_tpm.top_100k.csv', no_direction=True, output='/nfs/data2/dysregnet_gtex/results/tcga_breast_no_confounders_binary.fea', pvalue=0.01, output_stats='/nfs/data2/dysregnet_gtex/results/tcga_breast_no_confounders.csv')
+
+
+
+Data as submitted to dysregnet:
+
+expr:
+sample                    sample  RP11-34P13.7  ...    MT-ND6    MT-CYB
+TCGA-AR-A1AQ-01  TCGA-AR-A1AQ-01     -1.459375  ... -0.549466 -2.097931
+TCGA-E2-A15M-01  TCGA-E2-A15M-01      1.570945  ... -1.050987 -0.473037
+TCGA-D8-A1XW-01  TCGA-D8-A1XW-01     -0.363474  ... -0.087409 -0.196763
+TCGA-D8-A141-01  TCGA-D8-A141-01     -0.248895  ... -1.056427 -1.527830
+TCGA-E2-A14U-01  TCGA-E2-A14U-01      0.248937  ... -0.378061 -1.148461
+...                          ...           ...  ...       ...       ...
+TCGA-AR-A254-01  TCGA-AR-A254-01      0.248937  ... -1.998780 -1.562544
+TCGA-BH-A0DI-01  TCGA-BH-A0DI-01     -0.568984  ... -1.689249 -1.225749
+TCGA-A7-A3IZ-01  TCGA-A7-A3IZ-01      2.645334  ... -1.374385 -0.618313
+TCGA-AN-A0AJ-01  TCGA-AN-A0AJ-01     -2.622712  ... -3.516465 -2.343945
+TCGA-BH-A0HP-01  TCGA-BH-A0HP-01      1.802697  ... -0.221375 -0.512205
+
+[1211 rows x 22672 columns]
+
+meta:
+               sample  condition
+0     TCGA-AR-A1AQ-01          1
+1     TCGA-E2-A15M-01          1
+2     TCGA-D8-A1XW-01          1
+3     TCGA-D8-A141-01          1
+4     TCGA-E2-A14U-01          1
+...               ...        ...
+1206  TCGA-AR-A254-01          1
+1207  TCGA-BH-A0DI-01          1
+1208  TCGA-A7-A3IZ-01          1
+1209  TCGA-AN-A0AJ-01          1
+1210  TCGA-BH-A0HP-01          1
+
+[1211 rows x 2 columns]
+
+grn:
+      regulatoryGene     targetGene
+0               PAX8       PAX8-AS1
+1               PAX8   RP11-65I12.1
+2                TEF          NR1D1
+3               SOX2        AKR1B10
+4               SOX2          SFTPB
+...              ...            ...
+99995          LMX1A          CARD6
+99996         CC2D1A         TFAP2E
+99997          GLYR1          FLRT1
+99998           EBF2          FNDC1
+99999           LHX4  RP11-347I19.7
+
+[100000 rows x 2 columns]
+
+Meta composition:
+
+condition
+0     113
+1    1098
+dtype: int64
+
+
+You did not input any covariates in CatCov or ConCov parameters, proceed without them.
+Result:
+                 ('PAX8', 'PAX8-AS1')  ...  ('LHX4', 'RP11-347I19.7')
+patient id                             ...                           
+TCGA-AR-A1AQ-01                   0.0  ...                        0.0
+TCGA-E2-A15M-01                   0.0  ...                        0.0
+TCGA-D8-A1XW-01                   0.0  ...                        0.0
+TCGA-D8-A141-01                   0.0  ...                        0.0
+TCGA-E2-A14U-01                   0.0  ...                        0.0
+...                               ...  ...                        ...
+TCGA-AR-A254-01                   0.0  ...                        0.0
+TCGA-BH-A0DI-01                   0.0  ...                        0.0
+TCGA-A7-A3IZ-01                   0.0  ...                        0.0
+TCGA-AN-A0AJ-01                   0.0  ...                        0.0
+TCGA-BH-A0HP-01                   0.0  ...                        0.0
+
+[1098 rows x 100000 columns]
+Stats:
+                             R2  coef_intercept  ...  pval_intercept       pval_TF
+(PAX8, PAX8-AS1)       0.866653   -4.633754e-16  ...             1.0  2.214967e-50
+(PAX8, RP11-65I12.1)   0.663323    9.659488e-17  ...             1.0  5.319285e-28
+(TEF, NR1D1)           0.631557    1.059870e-15  ...             1.0  8.117998e-26
+(SOX2, AKR1B10)        0.299696   -1.002045e-16  ...             1.0  3.505881e-10
+(SOX2, SFTPB)          0.302970   -5.874346e-16  ...             1.0  2.689174e-10
+...                         ...             ...  ...             ...           ...
+(LMX1A, CARD6)         0.431480   -6.141889e-17  ...             1.0  2.781398e-15
+(CC2D1A, TFAP2E)       0.674381   -1.914921e-16  ...             1.0  8.267931e-29
+(GLYR1, FLRT1)         0.317692   -1.333289e-15  ...             1.0  8.040857e-11
+(EBF2, FNDC1)          0.547122    3.351608e-16  ...             1.0  8.186483e-21
+(LHX4, RP11-347I19.7)  0.662831    3.234675e-16  ...             1.0  5.770206e-28
+
+[100000 rows x 5 columns]
+Number of total dysregulations: 12661018
+Number of edges with at least one dysregulation: 99314
+Number of positive slopes: 98127
+Number of negative slopes: 1873

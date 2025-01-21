@@ -1,0 +1,101 @@
+Python version:
+3.11.0 | packaged by conda-forge | (main, Jan 14 2023, 12:27:40) [GCC 11.3.0]
+Arguments:
+Namespace(expr='/nfs/data/patients_networks/DysRegNet_workflow/results/expression_processed/LUAD/tpm.csv', meta='/nfs/data/patients_networks/DysRegNet_workflow/results/expression_processed/LUAD/tpm_meta.csv', grn='/nfs/data/patients_networks/DysRegNet_workflow/results/reference_networks/genie3/LUAD/genie3_LUAD_tpm.top_100k.csv', no_direction=True, output='/nfs/data2/dysregnet_gtex/results/tcga_lung_no_confounders_binary.fea', pvalue=0.01, output_stats='/nfs/data2/dysregnet_gtex/results/tcga_lung_no_confounders.csv')
+
+
+
+Data as submitted to dysregnet:
+
+expr:
+sample                    sample  RP11-34P13.7  ...    MT-ND6    MT-CYB
+TCGA-55-7995-01  TCGA-55-7995-01      0.496253  ... -0.036586 -0.059644
+TCGA-38-4625-11  TCGA-38-4625-11     -0.110067  ... -0.722210 -0.002905
+TCGA-69-7761-01  TCGA-69-7761-01     -0.110067  ... -0.205755 -1.255776
+TCGA-67-6216-01  TCGA-67-6216-01     -0.414540  ... -1.056571 -0.535812
+TCGA-44-6148-01  TCGA-44-6148-01      1.098818  ... -1.144351 -0.227255
+...                          ...           ...  ...       ...       ...
+TCGA-69-7763-01  TCGA-69-7763-01      0.408277  ...  0.130736 -0.002304
+TCGA-78-7150-01  TCGA-78-7150-01      1.139364  ... -1.327014 -0.099342
+TCGA-MP-A4TI-01  TCGA-MP-A4TI-01      0.711749  ... -0.784849 -0.875043
+TCGA-44-6145-01  TCGA-44-6145-01     -0.724020  ... -3.156197 -3.675106
+TCGA-05-4427-01  TCGA-05-4427-01      1.533816  ... -1.757535 -1.601624
+
+[574 rows x 22579 columns]
+
+meta:
+              sample  condition
+0    TCGA-55-7995-01          1
+1    TCGA-38-4625-11          0
+2    TCGA-69-7761-01          1
+3    TCGA-67-6216-01          1
+4    TCGA-44-6148-01          1
+..               ...        ...
+569  TCGA-69-7763-01          1
+570  TCGA-78-7150-01          1
+571  TCGA-MP-A4TI-01          1
+572  TCGA-44-6145-01          1
+573  TCGA-05-4427-01          1
+
+[574 rows x 2 columns]
+
+grn:
+      regulatoryGene     targetGene
+0               PAX8       PAX8-AS1
+1               PAX5            CR2
+2               PAX5          FCRLA
+3               SOX2  RP11-122M14.1
+4              NR5A2          CCL14
+...              ...            ...
+99995        ZNF587B           SMC6
+99996           ETV2   RP11-114F3.4
+99997          HMGN3          WDR34
+99998           RXRA         TRIOBP
+99999          TRPS1        TNFAIP8
+
+[100000 rows x 2 columns]
+
+Meta composition:
+
+condition
+0     59
+1    515
+dtype: int64
+
+
+You did not input any covariates in CatCov or ConCov parameters, proceed without them.
+Result:
+                 ('PAX8', 'PAX8-AS1')  ...  ('TRPS1', 'TNFAIP8')
+patient id                             ...                      
+TCGA-55-7995-01                   0.0  ...                   0.0
+TCGA-69-7761-01                   0.0  ...                   0.0
+TCGA-67-6216-01                   0.0  ...                   0.0
+TCGA-44-6148-01                   0.0  ...                   0.0
+TCGA-71-8520-01                   4.8  ...                   0.0
+...                               ...  ...                   ...
+TCGA-69-7763-01                   0.0  ...                   0.0
+TCGA-78-7150-01                   0.0  ...                   0.0
+TCGA-MP-A4TI-01                   0.0  ...                   0.0
+TCGA-44-6145-01                   0.0  ...                   0.0
+TCGA-05-4427-01                   0.0  ...                   0.0
+
+[515 rows x 100000 columns]
+Stats:
+                             R2  coef_intercept  ...  pval_intercept       pval_TF
+(PAX8, PAX8-AS1)       0.763441   -1.942890e-16  ...             1.0  1.720909e-19
+(PAX5, CR2)            0.709194    7.285839e-17  ...             1.0  6.404105e-17
+(PAX5, FCRLA)          0.719095    4.857226e-17  ...             1.0  2.370494e-17
+(SOX2, RP11-122M14.1)  0.796651   -1.161181e-16  ...             1.0  2.262072e-21
+(NR5A2, CCL14)         0.752017   -8.868774e-16  ...             1.0  6.646935e-19
+...                         ...             ...  ...             ...           ...
+(ZNF587B, SMC6)        0.601363    1.039967e-15  ...             1.0  5.549385e-13
+(ETV2, RP11-114F3.4)   0.136034   -5.793976e-16  ...             1.0  4.046743e-03
+(HMGN3, WDR34)         0.462238    4.780898e-15  ...             1.0  3.186300e-09
+(RXRA, TRIOBP)         0.764426   -3.344764e-17  ...             1.0  1.526886e-19
+(TRPS1, TNFAIP8)       0.172180    3.295975e-16  ...             1.0  1.084102e-03
+
+[100000 rows x 5 columns]
+Number of total dysregulations: 8951350
+Number of edges with at least one dysregulation: 97976
+Number of positive slopes: 92697
+Number of negative slopes: 7303
