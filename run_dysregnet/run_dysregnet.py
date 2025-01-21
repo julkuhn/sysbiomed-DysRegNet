@@ -81,10 +81,12 @@ data = dysregnet.run(expression_data=expr,
                    bonferroni_alpha=bonferroni_alpha)
 
 result = data.get_results()
+results_bin = data.get_results_binary()
 stats = data.get_model_stats()
 
 # feather needs str column names
 result.columns = [str(x) for x in result.columns]
+results_bin.columns = [str(x) for x in results_bin.columns]
 
 # Print some result statistics
 print("Result:")
@@ -106,8 +108,12 @@ print(f"Number of negative slopes: {np.sum(stats['coef_TF']<0)}")
 
 
 # Write output
-result.reset_index(names="patient id", inplace=True)
-result.to_feather(args.output)
+#result.reset_index(names="patient id", inplace=True)
+#result.to_feather(args.output)
 
-stats.to_csv(args.output_stats)
+#write binary output
+results_bin.reset_index(names="patient id", inplace=True)
+results_bin.to_feather(args.output)
+
+#stats.to_csv(args.output_stats)
 

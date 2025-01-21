@@ -17,7 +17,7 @@
 EXPR="/nfs/data/patients_networks/DysRegNet_workflow/results/expression_processed/LUAD/tpm.csv"
 META="/nfs/data/patients_networks/DysRegNet_workflow/results/expression_processed/LUAD/tpm_meta.csv"
 GRN="/nfs/data/patients_networks/DysRegNet_workflow/results/reference_networks/genie3/LUAD/genie3_LUAD_tpm.top_100k.csv"
-OUT="/nfs/data2/dysregnet_gtex/results/tcga_lung_no_confounders.fea"
+OUT="/nfs/data2/dysregnet_gtex/results/tcga_lung_no_confounders_binary.fea"
 OUT_STATS="/nfs/data2/dysregnet_gtex/results/tcga_lung_no_confounders.csv"
 
 # Run the Python script with the parameters
