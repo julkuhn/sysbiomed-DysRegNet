@@ -7,9 +7,15 @@ from matplotlib_venn import venn2
 import seaborn as sns
 import numpy as np
 
+plot_colors = {
+    'GTEX': 'lightcoral',  # Light red
+    'TCGA': 'lightblue',  # Light blue
+}
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--input_gtex', type=str, required=True)
 parser.add_argument('--input_tcga', type=str, required=True)
+parser.add_argument('--tissue', type=str, required=True)
 parser.add_argument('--output_dir', type=str, required=True)
 args = parser.parse_args()
 
@@ -43,9 +49,10 @@ gtex_melted = gtex_intersection.melt(id_vars=['Description'], var_name='GTEx_Sam
 tcga_melted = tcga_intersection.melt(id_vars=['sample'], var_name='TCGA_Sample', value_name='TCGA_Value')
 
 # Distribution plot with all values:
+'''
 plt.figure(figsize=(10, 6))
-sns.histplot(gtex_melted['GTEx_Value'], kde=True, color='red', label='GTEx', bins=30)
-sns.histplot(tcga_melted['TCGA_Value'], kde=True, color='blue', label='TCGA', bins=30)
+sns.histplot(gtex_melted['GTEx_Value'], kde=True, color=plot_colors['GTEX'], label='GTEx', bins=30)
+sns.histplot(tcga_melted['TCGA_Value'], kde=True, color=plot_colors['TCGA'], label='TCGA', bins=30)
 plt.title('Distribution of GTEx and TCGA values')
 plt.xlabel('Expression value')
 plt.ylabel('Density')
@@ -55,6 +62,7 @@ os.makedirs(output_dir, exist_ok=True)  # ensure the specified output_dir exists
 output_path = os.path.join(output_dir, "distribution_plot.png")
 plt.savefig(output_path, dpi=300)
 plt.close()
+'''
 
 # Distribution plot without outliers:
 def distribution_plot_without_outliers(gtex_dataframe, tcga_dataframe, outlier_threshold):
@@ -64,8 +72,8 @@ def distribution_plot_without_outliers(gtex_dataframe, tcga_dataframe, outlier_t
     melted_tcga = tcga_filtered.melt(value_name='Expression', var_name='Sample').dropna()
 
     plot, ax = plt.subplots(figsize=(10, 6))
-    sns.histplot(melted_gtex['Expression'], bins=50, kde=True, color='red', label='GTEx', alpha=0.7, ax=ax)
-    sns.histplot(melted_tcga['Expression'], bins=50, kde=True, color='blue', label='TCGA', alpha=0.7, ax=ax)
+    sns.histplot(melted_gtex['Expression'], bins=50, kde=True, color=plot_colors['GTEX'], label='GTEx', alpha=0.7, ax=ax)
+    sns.histplot(melted_tcga['Expression'], bins=50, kde=True, color=plot_colors['TCGA'], label='TCGA', alpha=0.7, ax=ax)
     ax.set_title(f'Distribution of GTEx and TCGA values with threshold at {outlier_threshold}')
     ax.set_xlabel('Expression value')
     ax.set_ylabel('Density')
@@ -73,19 +81,22 @@ def distribution_plot_without_outliers(gtex_dataframe, tcga_dataframe, outlier_t
     return plot
 
 # create and save plots
+'''
 for threshold in [1000, 200]:
     plot = distribution_plot_without_outliers(gtex_intersection, tcga_intersection, threshold)
     os.makedirs(output_dir, exist_ok=True)  # ensure the specified output_dir exists
     output_path = os.path.join(output_dir, f"distribution_plot_with_threshold_{threshold}.png")
     plot.savefig(output_path, dpi=300)
     plt.close(plot)
+'''
 
 # Distribution plot with log values:
+'''
 gtex_melted['GTEx_Value'] = np.log1p(gtex_melted['GTEx_Value'])  # log gtex (ln(1+x) to avoid log(0))
 tcga_melted['TCGA_Value'] = np.log1p(tcga_melted['TCGA_Value'])  # log tcga
 plt.figure(figsize=(10, 6))
-sns.histplot(gtex_melted['GTEx_Value'], kde=True, color='red', label='GTEx log', bins=30)
-sns.histplot(tcga_melted['TCGA_Value'], kde=True, color='blue', label='TCGA log', bins=30)
+sns.histplot(gtex_melted['GTEx_Value'], kde=True, color=plot_colors['GTEX'], label='GTEx log', bins=30)
+sns.histplot(tcga_melted['TCGA_Value'], kde=True, color=plot_colors['TCGA'], label='TCGA log', bins=30)
 plt.title('Distribution of log-transformed GTEx and TCGA values')
 plt.xlabel('Natural logarithmic expression value (log1p)')
 plt.ylabel('Density')
@@ -95,8 +106,9 @@ os.makedirs(output_dir, exist_ok=True)  # ensure the specified output_dir exists
 output_path = os.path.join(output_dir, "distribution_plot_log_values.png")
 plt.savefig(output_path, dpi=300)
 plt.close()
+'''
 
-# Distribution plot with log values and medians of the genes: -> use already logged gtex_melted and tcga_melted
+# Distribution plot with log-transformed medians of the genes:
 gtex_medians = gtex_intersection.iloc[:, 1:].median(axis=1)  # gene-wise medians, skipping 'Description' column
 tcga_medians = tcga_intersection.iloc[:, 1:].median(axis=1)  # gene-wise medians, skipping 'sample' column
 gtex_medians = np.log1p(gtex_medians)  # log the medians
@@ -106,12 +118,12 @@ print(gtex_medians.head())
 print("TCGA medians:")
 print(tcga_medians.head())
 plt.figure(figsize=(10, 6))
-sns.histplot(gtex_medians, kde=True, color='red', label='GTEx logged gene medians', bins=30)
-sns.histplot(tcga_medians, kde=True, color='blue', label='TCGA logged gene medians', bins=30)
-plt.title('Distribution of Log-transformed Gene Medians')
-plt.xlabel('Logarithmic Gene Medians (log1p)')
-plt.ylabel('Density')
-plt.legend()
+sns.histplot(gtex_medians, kde=True, color=plot_colors['GTEX'], label='GTEx logged gene medians', bins=30)
+sns.histplot(tcga_medians, kde=True, color=plot_colors['TCGA'], label='TCGA logged gene medians', bins=30)
+plt.title(f'Distribution of Log-transformed Gene Medians \nTissue: {args.tissue}', fontsize=20)
+plt.xlabel('Logarithmic Gene Medians (log1p)', fontsize=16)
+plt.ylabel('Density', fontsize=16)
+plt.legend(fontsize=14)
 # save file
 os.makedirs(output_dir, exist_ok=True)  # ensure the specified output_dir exists
 output_path = os.path.join(output_dir, "distribution_plot_log_gene_medians.png")
@@ -133,12 +145,15 @@ print("Exclusive TCGA genes, not in GTEx genes:", len(tcga_only))  # the ones in
 plt.figure(figsize=(8, 8))
 venn = venn2(
     subsets=(len(gtex_only), len(tcga_only), len(intersection)),  # attention to order: intersection as third value
-    set_labels=('Exclusive GTEx genes', 'Exclusive TCGA genes', 'Common genes')
+    set_labels=('GTEx genes', 'TCGA genes', 'Common genes'),
 )
-venn.get_patch_by_id('10').set_color('red')  # red for GTEx exclusive
-venn.get_patch_by_id('01').set_color('blue')  # blue for TCGA exclusive
+for label in venn.set_labels:
+    if label:  # check if label exists, if so set its size
+        label.set_fontsize(16)
+venn.get_patch_by_id('10').set_color(plot_colors['GTEX'])  # color for GTEx exclusive
+venn.get_patch_by_id('01').set_color(plot_colors['TCGA'])  # color for TCGA exclusive
 venn.get_patch_by_id('11').set_color('purple')  # purple for overlap
-plt.title('Venn diagram of common genes and exclusive GTEx/TCGA genes')  # unique genes are used
+plt.title(f'Venn diagram of common genes \nand exclusive GTEx/TCGA genes \nTissue: {args.tissue}', fontsize=20)  # unique genes are used
 os.makedirs(output_dir, exist_ok=True)  # ensure the output directory exists
 output_path = os.path.join(output_dir, "venn_diagram.png")
 plt.savefig(output_path, dpi=300)
